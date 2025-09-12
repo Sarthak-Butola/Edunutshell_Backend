@@ -2,6 +2,9 @@ import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { authMiddleware } from "../middleware/auth.js";
+import { requireRole } from "../middleware/roleCheck.js";
+
 const router = express.Router();
 
 // Simple test route
@@ -10,10 +13,10 @@ router.get("/hello", (req, res) => {
 });
 
 // Create user (for testing)
-// Signup
-router.post("/signup", async (req, res) => {
+// Signup, only admin can add new users
+router.post("/signup", authMiddleware,requireRole("admin") , async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // hash password
     const salt = await bcrypt.genSalt(10);
@@ -23,6 +26,7 @@ router.post("/signup", async (req, res) => {
       name,
       email,
       passwordHash: hashedPassword,
+      role
     });
 
     await newUser.save();
@@ -49,9 +53,9 @@ router.post("/login", async (req, res) => {
 
     // Create Access Token
     const accessToken = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" } // short-lived
+      { expiresIn: "1d" } // short-lived
     );
 
     // Create Refresh Token
@@ -85,7 +89,7 @@ router.post("/refresh", (req, res) => {
     if (err) return res.status(403).json({ message: "Invalid refresh token" });
 
     const newAccessToken = jwt.sign(
-      { id: decoded.id },
+      { id: decoded.id, role:decoded.role },
       process.env.JWT_SECRET,
       { expiresIn: "15m" }
     );

@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
+import resourceRoutes from "./routes/resourceRoutes.js";
 
 const app = express();
 
@@ -17,5 +19,7 @@ app.get("/", (req, res) => {
 
 // Mount user routes
 app.use("/api/users", userRoutes);
+app.use("/api/tasks", taskRoutes)
+app.use("/api/resources", resourceRoutes)
 
 export default app;
