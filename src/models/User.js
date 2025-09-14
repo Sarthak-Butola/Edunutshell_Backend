@@ -6,10 +6,11 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true },
   role: { type: String, enum: ["user", "admin"], default: "user" },
   team: { type: String },
-  phone: { type: String },
-  startDate: { type: Date, default: Date.now },
+  phone: { type: String, required:true },
+  startDate: { type: Date, required:true },
   status: { type: String, enum: ["active", "inactive", "pending"], default: "pending" },
-  preferredLanguage: { type: String, default: "en" }
+  preferredLanguage: { type: String, default: "en" },
+  emailSent: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", userSchema);

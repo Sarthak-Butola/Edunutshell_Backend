@@ -16,7 +16,7 @@ router.get("/hello", (req, res) => {
 // Signup, only admin can add new users
 router.post("/signup", authMiddleware,requireRole("admin") , async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, phone, startDate } = req.body;
 
     // hash password
     const salt = await bcrypt.genSalt(10);
@@ -26,7 +26,9 @@ router.post("/signup", authMiddleware,requireRole("admin") , async (req, res) =>
       name,
       email,
       passwordHash: hashedPassword,
-      role
+      role,
+      phone,
+      startDate
     });
 
     await newUser.save();
@@ -55,7 +57,7 @@ router.post("/login", async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" } // short-lived
+      { expiresIn: "7d" } // short-lived
     );
 
     // Create Refresh Token
@@ -108,6 +110,32 @@ router.post("/logout", (req, res) => {
   res.clearCookie("refreshToken");
   res.status(200).json({ message: "Logged out successfully ✅" });
   }catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// -------------------- UPDATE PROFILE (USER) --------------------
+router.patch("/profile", authMiddleware, async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+
+    // Only allow these fields
+    const updates = {};
+    if (name) updates.name = name;
+    if (phone) updates.phone = phone;
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No valid fields to update" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,   // comes from JWT
+      { $set: updates },
+      { new: true, runValidators: true } // returns updated doc
+    ).select("-passwordHash"); // don't send password back
+
+    res.json(updatedUser);
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
