@@ -1,8 +1,5 @@
 https://app.visily.ai/
 
-DB_PASS=61MwvjtiXjd6IcSB
-
-
 <!-- Folder structure -->
 Edunutshell_Backend/
 │── src/
@@ -38,10 +35,4 @@ Edunutshell_Backend/
 │── .env
 
 
-<!-- next tasks -->
-==>create a profile api to update name,phone,... fields which can be done by the user and the admin.✔️
-==>see if response patch api is required or not, or simply make one.
-==>template of tasks, understand how this works, make schema and them apis.
-==>email automated on basis of dates. Figure this out too.
-<!-- IMPORTANT -->
-==>reduce access Token life in signup later
+

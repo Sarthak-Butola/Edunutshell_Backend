@@ -61,5 +61,8 @@ export function startEmailReminderJob() {
     } catch (err) {
       console.error("❌ Error in cron job:", err);
     }
-  });
+  }, {
+  timezone: "Asia/Kolkata"
+}
+);
 }

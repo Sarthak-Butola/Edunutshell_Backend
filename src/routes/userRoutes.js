@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
 
     // Create Refresh Token
     const refreshToken = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role},
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" } // long-lived
     );
@@ -93,7 +93,7 @@ router.post("/refresh", (req, res) => {
     const newAccessToken = jwt.sign(
       { id: decoded.id, role:decoded.role },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "1d" }
     );
 
     res.status(200).json({ accessToken: newAccessToken });

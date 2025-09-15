@@ -5,8 +5,7 @@ import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import resourceRoutes from "./routes/resourceRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
-
-
+import formRoutes from "./routes/formRoutes.js";
 
 const app = express();
 
@@ -25,5 +24,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/forms", formRoutes);
 
 export default app;
