@@ -34,7 +34,7 @@ router.post(
   requireRole("admin"), // only admins
   async (req, res) => {
     try {
-      const { title, description, dueDate, assignedTo, team, type, workflowId } = req.body;
+      const { title, description, dueDate, assignedTo, team, type, picture } = req.body;
 
       const newTask = new Task({
         title,
@@ -43,7 +43,7 @@ router.post(
         assignedTo,
         team,
         type,
-        workflowId,
+        picture,
         status: "pending",
       });
 

@@ -8,7 +8,8 @@ const taskSchema = new mongoose.Schema({
   team: { type: String }, // optional team assignment
   status: { type: String, enum: ["pending", "in-progress", "completed"], default: "pending" },
   type: { type: String, enum: ["daily", "form", "document"], default: "daily" },
-  workflowId: { type: mongoose.Schema.Types.ObjectId, ref: "Workflow" }, // optional link to workflow
+  picture: { type: String }, // optional, URL/path
+  // workflowId: { type: mongoose.Schema.Types.ObjectId, ref: "Workflow" }, // optional link to workflow
 }, { timestamps: true });
 
 const Task = mongoose.model("Task", taskSchema);
