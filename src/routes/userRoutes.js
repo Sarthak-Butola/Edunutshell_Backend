@@ -74,7 +74,13 @@ router.post("/login", async (req, res) => {
       sameSite: "strict",
     });
 
-    res.json({ accessToken });
+    res.json({ accessToken,
+      user: {
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
+      },
+      });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
