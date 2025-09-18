@@ -10,6 +10,7 @@ const startServer = async () => {
     await connectDB(); // ✅ wait for DB connection
     console.log("MongoDB connected ✅");
 
+    
     // Start cron AFTER DB is ready
     startEmailReminderJob();
 
