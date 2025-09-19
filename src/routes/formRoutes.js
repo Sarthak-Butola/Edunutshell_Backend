@@ -85,7 +85,7 @@ router.post("/:formId/submit", authMiddleware, async (req, res) => {
 });
 
 // GET /api/forms/:formId/responses
-router.get("/:formId/responses", authMiddleware, async (req, res) => {
+router.get("/:formId/responses", authMiddleware, requireRole("admin"), async (req, res) => {
   try {
     const { formId } = req.params;
 
