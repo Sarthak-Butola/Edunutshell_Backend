@@ -16,7 +16,7 @@ router.get("/hello", (req, res) => {
 // Signup, only admin can add new users
 router.post("/signup", authMiddleware,requireRole("admin") , async (req, res) => {
   try {
-    const { name, email, password, role, phone, startDate } = req.body;
+    const { name, email, password, role, phone, startDate, jobTitle} = req.body;
 
     // hash password
     const salt = await bcrypt.genSalt(10);
@@ -28,11 +28,16 @@ router.post("/signup", authMiddleware,requireRole("admin") , async (req, res) =>
       passwordHash: hashedPassword,
       role,
       phone,
-      startDate
+      startDate,
+      jobTitle
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User created successfully ✅" });
+    res.status(201).json({ message: "User created successfully ✅", 
+      user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, jobTitle: newUser.jobTitle,
+              phone:newUser.phone, startDate:newUser.startDate
+       }
+     });
   } catch (err) {
     if (err.code === 11000) {
       return res.status(400).json({ message: "Email already exists ❌" });
@@ -81,6 +86,7 @@ router.post("/login", async (req, res) => {
         role: user.role,
         email:user.email,
         id:user._id,
+        jobTitle:user.jobTitle,
         startDate:user.startDate
       },
       });
