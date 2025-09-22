@@ -74,4 +74,21 @@ router.post("/:templateId/assign/:userId", authMiddleware, requireRole("admin"),
 });
 
 
+
+router.delete("/:templateId/delete", authMiddleware, requireRole("admin"), async(req,res)=>{
+
+ try {
+    const { templateId } = req.params;
+
+   const deletedTemplate = await TaskTemplate.findByIdAndDelete(templateId);
+   if (!deletedTemplate) return res.status(404).json({ message: "Template not found ❌" });
+
+    res.status(200).json({ message: "Template deleted successfully ✅" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
 export default router;

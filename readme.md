@@ -1,5 +1,3 @@
-https://app.visily.ai/
-
 <!-- Folder structure -->
 Edunutshell_Backend/
 │── src/

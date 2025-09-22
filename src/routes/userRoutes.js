@@ -177,5 +177,47 @@ router.get("/:id", authMiddleware, requireRole("admin"), async (req, res) => {
   }
 });
 
+// -------------------- CHANGE PASSWORD --------------------
+router.patch("/changePassword", authMiddleware, async (req, res) => {
+  try {
+    const { password, newPassword } = req.body;
+
+    if (!password || !newPassword) {
+      return res.status(400).json({ message: "Both current and new passwords are required" });
+    }
+
+    // 2. Password strength check
+    if (newPassword.trim().length < 8) {
+      return res.status(400).json({ message: "New password must be at least 8 characters long" });
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if (!passwordRegex.test(newPassword)) {
+    return res.status(400).json({ 
+      message: "Password must be at least 8 characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character"
+    });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) return res.status(401).json({ message: "Incorrect current password" });
+
+
+    const salt = await bcrypt.genSalt(10);
+
+    const cleanedNewPassword = newPassword.trim();
+    user.passwordHash = await bcrypt.hash(cleanedNewPassword, salt);
+
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully ✅" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default router;
