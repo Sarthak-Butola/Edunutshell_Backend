@@ -2,6 +2,7 @@ import express from "express";
 import Resource from "../models/Resource.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { requireRole } from "../middleware/roleCheck.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -47,5 +48,26 @@ router.post(
     }
   }
 );
+
+// -------------------- DELETE RESOURCE (Admin only) --------------------
+
+router.delete("/:resourceId/delete", authMiddleware, requireRole("admin"), async(req,res)=>{
+  try{
+    const resourceId = req.params.resourceId;
+
+  if (!mongoose.Types.ObjectId.isValid(resourceId)) {
+  return res.status(400).json({ message: "Invalid resource ID" });
+  }
+
+    const resource = await Resource.findByIdAndDelete(resourceId);
+    
+    if(!resource)
+    return res.status(404).json({message:"Resource not found"});
+
+    return res.status(200).json({message:"Resource deleted successfully"});
+  }catch(err){
+    res.status(500).json({ error: err.message });
+  }
+});
 
 export default router;

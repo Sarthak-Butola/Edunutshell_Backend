@@ -59,30 +59,32 @@ https://github.com/Sarthak-Butola/Edunutshell_Backend.git
 
 ## 📂 Project Structure
 
+
+
 Edunutshell_Backend/
 ├── src/
-│ ├── config/
-│ │ └── db.js # MongoDB connection
-│ ├── models/
-│ │ ├── User.js
-│ │ ├── Task.js
-│ │ ├── Resource.js
-│ │ ├── Ticket.js
-│ │ ├── Form.js
-│ │ └── Response.js
-│ ├── routes/
-│ │ ├── userRoutes.js
-│ │ ├── taskRoutes.js
-│ │ ├── resourceRoutes.js
-│ │ ├── ticketRoutes.js
-│ │ └── formRoutes.js
-│ ├── middleware/
-│ │ ├── auth.js
-│ │ └── requireRole.js
-│ ├── utils/ # helper functions
-│ ├── server.js # starts the app
-│ └── app.js # where routes and middleware are mounted
-├── .env.sample # sample env variables
+│   ├── config/
+│   │   └── db.js           # MongoDB connection
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Task.js
+│   │   ├── Resource.js
+│   │   ├── Ticket.js
+│   │   ├── Form.js
+│   │   └── Response.js
+│   ├── routes/
+│   │   ├── userRoutes.js
+│   │   ├── taskRoutes.js
+│   │   ├── resourceRoutes.js
+│   │   ├── ticketRoutes.js
+│   │   └── formRoutes.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── requireRole.js
+│   ├── utils/              # helper functions
+│   ├── server.js           # starts the app
+│   └── app.js              # where routes and middleware are mounted
+├── .env.sample             # sample env variables
 ├── package.json
 └── README.md
 

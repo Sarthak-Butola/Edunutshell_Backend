@@ -2,6 +2,7 @@ import express from "express";
 import Ticket from "../models/Ticket.js";
 import { authMiddleware } from "../middleware/auth.js";
 import { requireRole } from "../middleware/roleCheck.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -74,5 +75,23 @@ router.patch("/:id/close", authMiddleware, requireRole("admin"), async (req, res
 });
 
 
+router.delete("/:ticketId/delete", authMiddleware, requireRole("admin"), async(req,res)=>{
+  try{
+    const ticketId = req.params.ticketId;
+
+    if (!mongoose.Types.ObjectId.isValid(ticketId)) {
+      return res.status(400).json({ message: "Invalid ticket ID" });
+      }
+
+    const ticket = await Ticket.findByIdAndDelete(ticketId);
+
+    if(!ticket)
+      return res.status(404).json({message:"ticket not found"});
+
+      return res.status(200).json({message:"Ticket deleted successfully", ticket})
+  }catch(err){
+    res.status(500).json({ error: err.message });
+  }
+});
 
 export default router;
